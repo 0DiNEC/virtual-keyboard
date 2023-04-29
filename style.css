@@ -5,7 +5,7 @@
 .main {
   display: flex;
   flex-direction: column;
-  width: 70%;
+  width: 75%;
   margin: 0 auto;
 }
 
@@ -17,4 +17,76 @@
 
 .textarea {
   font-size: 2em;
+  margin-bottom: 30px;
+}
+
+.keyboard__row {
+  display: flex;
+}
+
+.key-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-basis: 60px;
+  height: 60px;
+  border: 1px solid white;
+  margin: 5px;
+
+  font-size: 1.5em;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.key-button13, /* backspace */
+.key-button14, /* tab */
+.key-button28,  /* del */
+.key-button29,  /* caps lock */
+.key-button41,  /* enter */
+.key-button42,  /* shift */
+.key-button53,  /* up arrow */
+.key-button54,  /* right shift */
+.key-button55,  /* ctrl */
+.key-button56,  /* win button */
+.key-button57,  /* alt */
+.key-button59,  /* right alt */
+.key-button60,  /* left arrow */
+.key-button61,  /* down arrow */
+.key-button62,  /* right arrow */
+.key-button63  /* right ctrl */ {
+  font-weight: 500;
+}
+
+.key-button13, /* backspace */
+.key-button14, /* tab */
+.key-button28,  /* del */
+.key-button29,  /* caps lock */
+.key-button41,  /* enter */
+.key-button42,  /* shift */
+.key-button54  /* right shift */ {
+  padding: 0 0.5em;
+}
+
+.key-button13, /* backspace */
+.key-button28,  /* del */
+.key-button41,  /* enter */
+.key-button54,  /* right shift */ 
+.key-button58  /* space*/ {
+  flex-grow: 2;
+}
+
+.key-button29  /* caps lock */ {
+  flex-grow: 1;
+}
+.key-button42  /* shift*/ {
+  flex-grow: 1.5;
+}
+
+.key-button63 /* right control*/ {
+  flex-grow: 0.2;
+}
+
+.key-button29  /* caps lock */ {
+  font-size: 1.2em;
 }

@@ -85,6 +85,7 @@ const englishKeyboardLayout = [
 ];
 
 const keyboardCode = [
+  // first row
   "Backquote",
   "Digit1",
   "Digit2",
@@ -99,6 +100,7 @@ const keyboardCode = [
   "Minus",
   "Equal",
   "Backspace",
+  //second row
   "Tab",
   "KeyQ",
   "KeyW",
@@ -114,6 +116,7 @@ const keyboardCode = [
   "BracketRight",
   "Backslash",
   "Delete",
+  // third row
   "CapsLock",
   "KeyA",
   "KeyS",
@@ -127,6 +130,7 @@ const keyboardCode = [
   "Semicolon",
   "Quote",
   "Enter",
+  //fourth row
   "ShiftLeft",
   "KeyZ",
   "KeyX",
@@ -140,6 +144,7 @@ const keyboardCode = [
   "Slash",
   "ArrowUp",
   "ShiftRight",
+  //five row
   "ControlLeft",
   "MetaLeft",
   "AltLeft",
@@ -175,15 +180,53 @@ function buildHTML() {
 }
 buildHTML();
 
+// caps lock key down
+bCaps = false;
+// shift key down
+bShift = false;
+
+let textarea = document.querySelector(".textarea"); // textarea for output press buttons values
+let keyButtons = document.querySelectorAll(".key-button"); // all key buttons on virtual keyboard
+
 // virtual keyboard mouse down
-let textarea = document.querySelector(".textarea");
-let keyButtons = document.querySelectorAll(".key-button");
-keyButtons.forEach((button) => {
-  button.addEventListener(
-    "mousedown",
-    () => (textarea.textContent += button.textContent),
-    false
-  );
+for (let i = 0; i<keyButtons.length; i++) {
+  keyButtons[i].addEventListener("mousedown", function (event) {
+
+  })
+}
+
+window.onkeydown = evt => {
+  if (evt.key == 'Tab') {
+      evt.preventDefault();
+  }
+}
+
+//real keyboard keydown
+document.body.addEventListener("keydown", function (event) {
+  for (let i = 0; i < keyboardCode.length; i++) {
+    if (event.code === keyboardCode[i]) {
+      keyButtons[i].classList.add('key-button_active');
+      keyDown(keyboardCode[i], keyButtons[i]);
+    }
+  }
 });
 
-function keyDown(button) {}
+document.body.addEventListener("keyup", function (event) {
+  for (let i = 0; i < keyboardCode.length; i++) {
+    if (event.code === keyboardCode[i]) {
+      keyButtons[i].classList.remove('key-button_active');
+    }
+  }
+});
+
+function keyDown(code, button) {
+  const cursorPosition = textarea.selectionStart;
+  let text = textarea.textContent;
+  switch (code){
+    case "Backspace": text = text.substring(0, text.length - 1);
+    case "Tab": text += text.substring(0, cursorPosition) + "\t" + text.substring(cursorPosition, text.length);
+    default: text += text.substring(0, cursorPosition) + button.textContent;
+  }
+  console.log(text);
+  textarea.textContent = text;
+}

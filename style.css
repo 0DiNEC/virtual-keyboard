@@ -1,5 +1,6 @@
 .body {
   background: #222020;
+  tab
 }
 
 .main {
@@ -52,11 +53,15 @@
   background-color: #230063;
  }
 
- .key-button:active {
+ .key-button:active,
+ .key-button_active{
   background-color: #0a06b5;
   border-radius: 5px;
  }
  
+ .hidden {
+  display: none;
+ }
 
 .key-button13, /* backspace */
 .key-button14, /* tab */

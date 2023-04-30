@@ -24,6 +24,11 @@
   display: flex;
 }
 
+.keyboard {
+  background: #09001a;
+  -webkit-user-select: none;
+}
+
 .key-button {
   display: flex;
   align-items: center;
@@ -32,12 +37,26 @@
   flex-basis: 60px;
   height: 60px;
   border: 1px solid white;
+  background: #09001a;
   margin: 5px;
+
+  transition: all 0.1s ease-in-out;
 
   font-size: 1.5em;
   color: white;
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.key-button:hover {
+  cursor: pointer;
+  background-color: #230063;
+ }
+
+ .key-button:active {
+  background-color: #0a06b5;
+  border-radius: 5px;
+ }
+ 
 
 .key-button13, /* backspace */
 .key-button14, /* tab */

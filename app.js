@@ -19,7 +19,7 @@ const englishKeyboardLayout = [
 
   // second row keyboard
   [
-    ["Tab", 50, "Tab", "Tab", "Tab"],
+    ["Tab", "Tab"],
     ["q", "Q"],
     ["w", "W"],
     ["e", "E"],
@@ -195,6 +195,14 @@ for (let i = 0; i < keyButtons.length; i++) {
   });
 }
 
+// virtual keyboard mouse up
+for (let i = 0; i < keyButtons.length; i++) {
+  keyButtons[i].addEventListener("mouseup", function () {
+    bShift = false;
+    changeKeyboard();
+  });
+}
+
 // block tabulation on window
 window.onkeydown = (event) => {
   if (event.key === "Tab") {
@@ -207,8 +215,6 @@ textarea.addEventListener("keydown", function (event) {
   event.preventDefault();
   return;
 });
-
-
 
 //real keyboard keydown
 document.body.addEventListener("keydown", function (event) {
@@ -225,15 +231,21 @@ document.body.addEventListener("keyup", function (event) {
     if (event.code === keyboardCode[i]) {
       keyButtons[i].classList.remove("key-button_active");
     }
+    // reset shift
+    if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
+      bShift = false;
+      changeKeyboard();
+    }
   }
 });
 
 // change keyboard to upper case and change lang
 function changeKeyboard() {
+  let nShift = bShift === true ? 1 : 0;
   let buttonNum = 0;
-  for(let i=0; i< englishKeyboardLayout.length; i++) {
-    for (let j =0; j< englishKeyboardLayout[i].length; j++, buttonNum++) {
-      keyButtons[buttonNum].textContent = englishKeyboardLayout[i][j][1];
+  for (let i = 0; i < englishKeyboardLayout.length; i++) {
+    for (let j = 0; j < englishKeyboardLayout[i].length; j++, buttonNum++) {
+      keyButtons[buttonNum].textContent = englishKeyboardLayout[i][j][nShift];
     }
   }
 }
@@ -265,9 +277,11 @@ function keyDown(code, button) {
       );
       break;
 
-      case "Shift" || "ShiftRight":
-        console.log(button.textContent);
-        break;
+    case "ShiftRight":
+    case "ShiftLeft":
+      bShift = true;
+      changeKeyboard();
+      break;
     default:
       text =
         text.substring(0, cursorPosition) +
@@ -283,4 +297,3 @@ function keyDown(code, button) {
       break;
   }
 }
-

@@ -208,8 +208,15 @@ for (let i = 0; i < keyButtons.length; i++) {
 
 // block tabulation on window
 window.onkeydown = (event) => {
-  if (event.key === "Tab") {
-    event.preventDefault();
+  switch (event.code) {
+    case "Tab":
+    case "AltLeft":
+    case "AltRight":
+    case "ControlLeft":
+    case "ControlRight":
+    case "MetaLeft":
+      event.preventDefault();
+      break;
   }
 };
 
@@ -278,13 +285,25 @@ function keyDown(code, button) {
   let text = textarea.value;
   switch (code) {
     case "Backspace":
-      if (textarea.selectionStart === 0) break;
+      if (cursorPosition === 0) break;
       text =
         text.substring(0, cursorPosition - 1) + text.substring(cursorPosition);
       // set textarea value
       textarea.value = text;
       textarea.selectionStart = cursorPosition - 1;
       break;
+
+    case "Delete": {
+      if (cursorPosition == text.length) break;
+      text =
+        text.substring(0, cursorPosition) + text.substring(cursorPosition + 1);
+      // set textarea value
+      textarea.value = text;
+      textarea.selectionStart = cursorPosition;
+      textarea.selectionEnd = cursorPosition;
+      break;
+    }
+
     case "Tab":
       text =
         text.substring(0, cursorPosition) +
@@ -320,6 +339,13 @@ function keyDown(code, button) {
     case "CapsLock":
       bCaps = !bCaps;
       capsLockKeyInput();
+      break;
+
+    case "AltLeft":
+    case "AltRight":
+    case "ControlLeft":
+    case "ControlRight":
+    case "MetaLeft":
       break;
 
     default:

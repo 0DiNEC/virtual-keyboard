@@ -228,13 +228,21 @@ document.body.addEventListener("keyup", function (event) {
   }
 });
 
+// change keyboard to upper case and change lang
+function changeKeyboard() {
+  let buttonNum = 0;
+  for(let i=0; i< englishKeyboardLayout.length; i++) {
+    for (let j =0; j< englishKeyboardLayout[i].length; j++, buttonNum++) {
+      keyButtons[buttonNum].textContent = englishKeyboardLayout[i][j][1];
+    }
+  }
+}
 
 function keyDown(code, button) {
   let cursorPosition = textarea.selectionStart;
   let text = textarea.value;
   switch (code) {
     case "Backspace":
-//      console.log(textarea.selectionStart);
       if (textarea.selectionStart === 0) break;
 
       text =
@@ -242,7 +250,6 @@ function keyDown(code, button) {
       // set textarea value
       textarea.value = text;
       textarea.selectionStart = cursorPosition - 1;
-//      console.log(cursorPosition - 1);
       break;
     case "Tab":
       text =
@@ -257,6 +264,10 @@ function keyDown(code, button) {
         cursorPosition + "\t".length
       );
       break;
+
+      case "Shift" || "ShiftRight":
+        console.log(button.textContent);
+        break;
     default:
       text =
         text.substring(0, cursorPosition) +

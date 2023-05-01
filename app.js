@@ -241,12 +241,10 @@ const keyboardCode = [
 ];
 let lang;
 function buildHTML() {
-  if (localStorage.getItem('lang') === "en")
-  lang = englishKeyboardLayout;
-  else if (localStorage.getItem('lang') === "ru")
-  lang = russianKeyboardLayout;
+  if (localStorage.getItem("lang") === "en") lang = englishKeyboardLayout;
+  else if (localStorage.getItem("lang") === "ru") lang = russianKeyboardLayout;
   else {
-    localStorage.setItem('lang', 'en');
+    localStorage.setItem("lang", "en");
     lang = englishKeyboardLayout;
   }
 
@@ -290,7 +288,6 @@ for (let i = 0; i < keyButtons.length; i++) {
       keyButtons[i].classList.toggle("key-button_active");
     keyDown(keyboardCode[i], keyButtons[i]);
     mouseSelectionStart = textarea.selectionStart;
-    console.log("до", textarea.selectionStart);
   });
 }
 
@@ -298,12 +295,15 @@ for (let i = 0; i < keyButtons.length; i++) {
 for (let i = 0; i < keyButtons.length; i++) {
   keyButtons[i].addEventListener("mouseup", function (event) {
     console.log("После", textarea.selectionStart);
-    if (keyboardCode[i] === "ShiftLeft" || keyboardCode[i] === "ShiftRight") {
-      bShift = false;
-      shiftKeyInput();
-    }
   });
 }
+
+document.addEventListener("mouseup", function(event) {
+  if (bShift) {
+    bShift = false;
+    shiftKeyInput();
+  }
+});
 
 // block tabulation on window
 window.onkeydown = (event) => {
@@ -351,12 +351,11 @@ document.addEventListener("keydown", function (event) {
 });
 
 function switchLanguage() {
-  if (localStorage.getItem('lang') === "en") {
-    localStorage.setItem('lang', 'ru');
+  if (localStorage.getItem("lang") === "en") {
+    localStorage.setItem("lang", "ru");
     lang = russianKeyboardLayout;
-  }
-  else if (localStorage.getItem('lang') === 'ru') {
-    localStorage.setItem('lang', 'en');
+  } else if (localStorage.getItem("lang") === "ru") {
+    localStorage.setItem("lang", "en");
     lang = englishKeyboardLayout;
   }
   shiftKeyInput();

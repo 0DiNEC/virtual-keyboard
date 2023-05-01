@@ -1,86 +1,87 @@
 const englishKeyboardLayout = [
   // first row keyboard
   [
-    ["`", "~"],
-    ["1", "!"],
-    ["2", "@"],
-    ["3", "#"],
-    ["4", "$"],
-    ["5", "%"],
-    ["6", "^"],
-    ["7", "&"],
-    ["8", "*"],
-    ["9", "("],
-    ["0", ")"],
-    ["-", "_"],
-    ["=", "+"],
-    ["Backspace", "Backspace", "Backspace", "Backspace"],
+    // [lower] [upper] [bCaps == Upper]
+    ["`", "~", false],
+    ["1", "!", false],
+    ["2", "@", false],
+    ["3", "#", false],
+    ["4", "$", false],
+    ["5", "%", false],
+    ["6", "^", false],
+    ["7", "&", false],
+    ["8", "*", false],
+    ["9", "(", false],
+    ["0", ")", false],
+    ["-", "_", false],
+    ["=", "+", false],
+    ["Backspace", "Backspace", "Backspace", "Backspace", false],
   ],
 
   // second row keyboard
   [
-    ["Tab", "Tab"],
-    ["q", "Q"],
-    ["w", "W"],
-    ["e", "E"],
-    ["r", "R"],
-    ["t", "T"],
-    ["y", "Y"],
-    ["u", "U"],
-    ["i", "I"],
-    ["o", "O"],
-    ["p", "P"],
-    ["[", "{"],
-    ["]", "}"],
-    ["\\", "|"],
-    ["Del", "Del"],
+    ["Tab", "Tab", false],
+    ["q", "Q", true],
+    ["w", "W", true],
+    ["e", "E", true],
+    ["r", "R", true],
+    ["t", "T", true],
+    ["y", "Y", true],
+    ["u", "U", true],
+    ["i", "I", true],
+    ["o", "O", true],
+    ["p", "P", true],
+    ["[", "{", false],
+    ["]", "}", false],
+    ["\\", "|", false],
+    ["Del", "Del", false],
   ],
 
   // third row keyboard
   [
-    ["Caps Lock", "Caps Lock"],
-    ["a", "A"],
-    ["s", "S"],
-    ["d", "D"],
-    ["f", "F"],
-    ["g", "G"],
-    ["h", "H"],
-    ["j", "J"],
-    ["k", "K"],
-    ["l", "L"],
-    [";", ":"],
-    ["'", '"'],
-    ["Enter", "Enter"],
+    ["Caps Lock", "Caps Lock", false],
+    ["a", "A", true],
+    ["s", "S", true],
+    ["d", "D", true],
+    ["f", "F", true],
+    ["g", "G", true],
+    ["h", "H", true],
+    ["j", "J", true],
+    ["k", "K", true],
+    ["l", "L", true],
+    [";", ":", false],
+    ["'", '"', false],
+    ["Enter", "Enter", false],
   ],
 
   //forth row keyboard
   [
-    ["Shift", "Shift"],
-    ["z", "Z"],
-    ["x", "X"],
-    ["c", "C"],
-    ["v", "V"],
-    ["b", "B"],
-    ["n", "N"],
-    ["m", "M"],
-    [",", "<"],
-    [".", ">"],
-    ["/", "?"],
-    ["▲", "▲"],
-    ["Shift", "Shift"],
+    ["Shift", "Shift", false],
+    ["z", "Z", true],
+    ["x", "X", true],
+    ["c", "C", true],
+    ["v", "V", true],
+    ["b", "B", true],
+    ["n", "N", true],
+    ["m", "M", true],
+    [",", "<", false],
+    [".", ">", false],
+    ["/", "?", false],
+    ["▲", "▲", false],
+    ["Shift", "Shift", false],
   ],
 
   // five row keyboard
   [
-    ["Ctrl", "Ctrl"],
-    ["Win", "Win"],
-    ["Alt", "Alt"],
-    [" ", " "],
-    ["Alt", "Alt"],
-    ["◄", "◄"],
-    ["▼", "▼"],
-    ["►", "►"],
-    ["Ctrl", "Ctrl"],
+    ["Ctrl", "Ctrl", false],
+    ["Win", "Win", false],
+    ["Alt", "Alt", false],
+    [" ", " ", false],
+    ["Alt", "Alt", false],
+    ["◄", "◄", false],
+    ["▼", "▼", false],
+    ["►", "►", false],
+    ["Ctrl", "Ctrl", false],
   ],
 ];
 
@@ -190,7 +191,9 @@ let keyButtons = document.querySelectorAll(".key-button"); // all key buttons on
 
 // virtual keyboard mouse down
 for (let i = 0; i < keyButtons.length; i++) {
-  keyButtons[i].addEventListener("mousedown", function () {
+  keyButtons[i].addEventListener("mousedown", function (event) {
+    if (keyboardCode[i] == "CapsLock") 
+      keyButtons[i].classList.toggle("key-button_active");
     keyDown(keyboardCode[i], keyButtons[i]);
   });
 }
@@ -220,7 +223,9 @@ textarea.addEventListener("keydown", function (event) {
 document.body.addEventListener("keydown", function (event) {
   for (let i = 0; i < keyboardCode.length; i++) {
     if (event.code === keyboardCode[i]) {
-      keyButtons[i].classList.add("key-button_active");
+      if (event.code == "CapsLock") {
+        keyButtons[i].classList.toggle("key-button_active");
+      } else keyButtons[i].classList.add("key-button_active");
       keyDown(keyboardCode[i], keyButtons[i]);
     }
   }
@@ -229,23 +234,38 @@ document.body.addEventListener("keydown", function (event) {
 document.body.addEventListener("keyup", function (event) {
   for (let i = 0; i < keyboardCode.length; i++) {
     if (event.code === keyboardCode[i]) {
+      if (event.code === "CapsLock") return;
       keyButtons[i].classList.remove("key-button_active");
     }
     // reset shift
     if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
       bShift = false;
-      changeKeyboard();
+      shiftKeyInput();
     }
   }
 });
 
-// change keyboard to upper case and change lang
-function changeKeyboard() {
-  let nShift = bShift === true ? 1 : 0;
+// change keyboard to upper case
+function shiftKeyInput() {
+  const nShift = !bCaps ? (bShift ? 1 : 0) : bShift ? 0 : 1;
   let buttonNum = 0;
   for (let i = 0; i < englishKeyboardLayout.length; i++) {
     for (let j = 0; j < englishKeyboardLayout[i].length; j++, buttonNum++) {
-      keyButtons[buttonNum].textContent = englishKeyboardLayout[i][j][nShift];
+      if (englishKeyboardLayout[i][j][2] === true) // for letter
+        keyButtons[buttonNum].textContent = englishKeyboardLayout[i][j][nShift];
+      else // for spec sim
+      keyButtons[buttonNum].textContent = englishKeyboardLayout[i][j][bShift ? 1 : 0];
+    }
+  }
+}
+
+function capsLockKeyInput() {
+  const nShift = !bCaps ? (bShift ? 1 : 0) : bShift ? 0 : 1;
+  let buttonNum = 0;
+  for (let i = 0; i < englishKeyboardLayout.length; i++) {
+    for (let j = 0; j < englishKeyboardLayout[i].length; j++, buttonNum++) {
+      if (englishKeyboardLayout[i][j][2] === true)
+        keyButtons[buttonNum].textContent = englishKeyboardLayout[i][j][nShift];
     }
   }
 }
@@ -280,7 +300,12 @@ function keyDown(code, button) {
     case "ShiftRight":
     case "ShiftLeft":
       bShift = true;
-      changeKeyboard();
+      shiftKeyInput();
+      break;
+
+    case "CapsLock":
+      bCaps = !bCaps;
+      capsLockKeyInput();
       break;
     default:
       text =

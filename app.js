@@ -1,3 +1,5 @@
+/* eslint-disable comma-dangle */
+/* eslint-disable quotes */
 const englishKeyboardLayout = [
   // first row keyboard
   [
@@ -54,7 +56,7 @@ const englishKeyboardLayout = [
     ["Enter", "Enter", false],
   ],
 
-  //forth row keyboard
+  // forth row keyboard
   [
     ["Shift", "Shift", false],
     ["z", "Z", true],
@@ -121,7 +123,7 @@ const russianKeyboardLayout = [
     ["\\", "/", false],
     ["Del", "Del", false],
   ],
-  //third row
+  // third row
   [
     ["Caps Lock", "Caps Lock", false],
     ["ф", "Ф", true],
@@ -184,7 +186,7 @@ const keyboardCode = [
   "Minus",
   "Equal",
   "Backspace",
-  //second row
+  // second row
   "Tab",
   "KeyQ",
   "KeyW",
@@ -214,7 +216,7 @@ const keyboardCode = [
   "Semicolon",
   "Quote",
   "Enter",
-  //fourth row
+  // fourth row
   "ShiftLeft",
   "KeyZ",
   "KeyX",
@@ -228,7 +230,7 @@ const keyboardCode = [
   "Slash",
   "ArrowUp",
   "ShiftRight",
-  //five row
+  // five row
   "ControlLeft",
   "MetaLeft",
   "AltLeft",
@@ -258,14 +260,14 @@ function buildHTML() {
   );
 
   // create keyboard
-  let keyboard = document.querySelector(".keyboard");
+  const keyboard = document.querySelector(".keyboard");
   let keyButtonNum = 0;
   for (let i = 0; i < lang.length; i++) {
     let innerHTML = `<div class="keyboard__row __row${i}">`;
     for (let j = 0; j < lang[i].length; j++, keyButtonNum++) {
       innerHTML += `<span class="key-button key-button${keyButtonNum}">${lang[i][j][0]}</span>`;
     }
-    innerHTML += `</div>`;
+    innerHTML += "</div>";
     keyboard.insertAdjacentHTML("beforeend", innerHTML);
   }
 }
@@ -276,98 +278,9 @@ let bCaps = false;
 // shift key down
 let bShift = false;
 
-let textarea = document.querySelector(".textarea"); // textarea for output press buttons values
-let keyButtons = document.querySelectorAll(".key-button"); // all key buttons on virtual keyboard
+const textarea = document.querySelector(".textarea"); // textarea for output press buttons values
+const keyButtons = document.querySelectorAll(".key-button"); // all key buttons on virtual keyboard
 let mouseSelectionStart = textarea.selectionStart;
-
-// virtual keyboard mouse down
-for (let i = 0; i < keyButtons.length; i++) {
-  keyButtons[i].addEventListener("mousedown", function (event) {
-    textarea.selectionStart = mouseSelectionStart;
-    if (keyboardCode[i] == "CapsLock")
-      keyButtons[i].classList.toggle("key-button_active");
-    keyDown(keyboardCode[i], keyButtons[i]);
-    mouseSelectionStart = textarea.selectionStart;
-  });
-}
-
-// virtual keyboard mouse up
-document.addEventListener("mouseup", function(event) {
-  if (bShift) {
-    bShift = false;
-    shiftKeyInput();
-  }
-});
-
-// block tabulation on window
-window.onkeydown = (event) => {
-  switch (event.code) {
-    case "Tab":
-    case "AltLeft":
-    case "AltRight":
-    case "ControlLeft":
-    case "ControlRight":
-    case "MetaLeft":
-      event.preventDefault();
-      break;
-  }
-};
-
-//block keydown event on textarea keydown
-textarea.addEventListener("keydown", function (event) {
-  event.preventDefault();
-  return;
-});
-
-textarea.addEventListener("click", function (event) {
-  mouseSelectionStart = textarea.selectionStart;
-  event.preventDefault();
-});
-
-//real keyboard keydown
-document.addEventListener("keydown", function (event) {
-  for (let i = 0; i < keyboardCode.length; i++) {
-    if (event.code === keyboardCode[i]) {
-      if (event.code == "CapsLock") {
-        keyButtons[i].classList.toggle("key-button_active");
-      } else keyButtons[i].classList.add("key-button_active");
-      keyDown(keyboardCode[i], keyButtons[i]);
-    }
-  }
-  if (event.code === "AltLeft") {
-    let bAltKeyDown = true;
-    document.addEventListener("keydown", function (event) {
-      if (bAltKeyDown && event.code === "ShiftLeft") switchLanguage();
-    });
-  } else {
-    let bAltKeyDown = false;
-  }
-});
-
-function switchLanguage() {
-  if (localStorage.getItem("lang") === "en") {
-    localStorage.setItem("lang", "ru");
-    lang = russianKeyboardLayout;
-  } else if (localStorage.getItem("lang") === "ru") {
-    localStorage.setItem("lang", "en");
-    lang = englishKeyboardLayout;
-  }
-  shiftKeyInput();
-}
-
-document.body.addEventListener("keyup", function (event) {
-  for (let i = 0; i < keyboardCode.length; i++) {
-    if (event.code === keyboardCode[i]) {
-      if (event.code === "CapsLock") return;
-      keyButtons[i].classList.remove("key-button_active");
-    }
-    // reset shift
-    if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
-      bShift = false;
-      shiftKeyInput(); // reinitialize keyboard
-    }
-  }
-});
 
 // change keyboard to upper case
 function shiftKeyInput() {
@@ -375,9 +288,10 @@ function shiftKeyInput() {
   let buttonNum = 0;
   for (let i = 0; i < lang.length; i++) {
     for (let j = 0; j < lang[i].length; j++, buttonNum++) {
-      if (lang[i][j][2] === true)
+      if (lang[i][j][2] === true) {
         // for letter
         keyButtons[buttonNum].textContent = lang[i][j][nShift];
+      }
       // for spec sim
       else keyButtons[buttonNum].textContent = lang[i][j][bShift ? 1 : 0];
     }
@@ -389,29 +303,28 @@ function capsLockKeyInput() {
   let buttonNum = 0;
   for (let i = 0; i < lang.length; i++) {
     for (let j = 0; j < lang[i].length; j++, buttonNum++) {
-      if (lang[i][j][2] === true)
+      if (lang[i][j][2] === true) {
         keyButtons[buttonNum].textContent = lang[i][j][nShift];
+      }
     }
   }
 }
 
 function keyDown(code, button) {
-  let cursorPosition = textarea.selectionStart;
+  const cursorPosition = textarea.selectionStart;
   let text = textarea.value;
   switch (code) {
     case "Backspace":
       if (cursorPosition === 0) break;
-      text =
-        text.substring(0, cursorPosition - 1) + text.substring(cursorPosition);
+      text = text.substring(0, cursorPosition - 1) + text.substring(cursorPosition);
       // set textarea value
       textarea.value = text;
       textarea.selectionStart = cursorPosition - 1;
       break;
 
     case "Delete": {
-      if (cursorPosition == text.length) break;
-      text =
-        text.substring(0, cursorPosition) + text.substring(cursorPosition + 1);
+      if (cursorPosition === text.length) break;
+      text = text.substring(0, cursorPosition) + text.substring(cursorPosition + 1);
       // set textarea value
       textarea.value = text;
       textarea.selectionStart = cursorPosition;
@@ -420,10 +333,10 @@ function keyDown(code, button) {
     }
 
     case "Tab":
-      text =
-        text.substring(0, cursorPosition) +
-        "\t" +
-        text.substring(cursorPosition, text.length);
+      text = `${text.substring(0, cursorPosition)}\t${text.substring(
+        cursorPosition,
+        text.length
+      )}`;
       // set textarea value
       textarea.value = text;
       textarea.setSelectionRange(
@@ -439,10 +352,10 @@ function keyDown(code, button) {
       break;
 
     case "Enter":
-      text =
-        text.substring(0, cursorPosition) +
-        "\n" +
-        text.substring(cursorPosition, text.length);
+      text = `${text.substring(0, cursorPosition)}\n${text.substring(
+        cursorPosition,
+        text.length
+      )}`;
       // set textarea value
       textarea.value = text;
       textarea.setSelectionRange(
@@ -464,10 +377,9 @@ function keyDown(code, button) {
       break;
 
     default:
-      text =
-        text.substring(0, cursorPosition) +
-        button.textContent +
-        text.substring(cursorPosition, text.length);
+      text = text.substring(0, cursorPosition)
+        + button.textContent
+        + text.substring(cursorPosition, text.length);
       // set textarea value
       textarea.value = text;
       textarea.selectionStart = cursorPosition + 1;
@@ -475,3 +387,108 @@ function keyDown(code, button) {
       break;
   }
 }
+
+let bShitDown = false;
+// change language
+function switchLanguage() {
+  if (bShitDown) {
+    bShitDown = false;
+    if (localStorage.getItem("lang") === "en") {
+      localStorage.setItem("lang", "ru");
+      lang = russianKeyboardLayout;
+    } else if (localStorage.getItem("lang") === "ru") {
+      localStorage.setItem("lang", "en");
+      lang = englishKeyboardLayout;
+    }
+    shiftKeyInput();
+  }
+}
+
+// virtual keyboard mouse down
+for (let i = 0; i < keyButtons.length; i++) {
+  // eslint-disable-next-line no-loop-func
+  keyButtons[i].addEventListener("mousedown", () => {
+    textarea.selectionStart = mouseSelectionStart;
+    if (keyboardCode[i] === "CapsLock") {
+      keyButtons[i].classList.toggle("key-button_active");
+    }
+    keyDown(keyboardCode[i], keyButtons[i]);
+    mouseSelectionStart = textarea.selectionStart;
+  });
+}
+
+// virtual keyboard mouse up
+document.addEventListener("mouseup", () => {
+  if (bShift) {
+    bShift = false;
+    shiftKeyInput();
+  }
+});
+
+// block tabulation on window
+window.onkeydown = (event) => {
+  switch (event.code) {
+    case "Tab":
+    case "AltLeft":
+    case "AltRight":
+    case "ControlLeft":
+    case "ControlRight":
+    case "MetaLeft":
+      event.preventDefault();
+      break;
+  }
+};
+
+// block keydown event on textarea keydown
+textarea.addEventListener("keydown", (event) => {
+  event.preventDefault();
+});
+
+textarea.addEventListener("click", (event) => {
+  mouseSelectionStart = textarea.selectionStart;
+  event.preventDefault();
+});
+
+// real keyboard keydown
+document.addEventListener("keydown", (event) => {
+  for (let i = 0; i < keyboardCode.length; i++) {
+    if (event.code === keyboardCode[i]) {
+      if (event.code === "CapsLock") {
+        keyButtons[i].classList.toggle("key-button_active");
+      } else keyButtons[i].classList.add("key-button_active");
+      keyDown(keyboardCode[i], keyButtons[i]);
+    }
+  }
+});
+
+let bAltKeyDown = false;
+document.addEventListener("keydown", (event) => {
+  if (event.code === "AltLeft") {
+    bAltKeyDown = true;
+    document.addEventListener("keydown", (eventShiftDown) => {
+      if (eventShiftDown.code === "ShiftLeft") bShitDown = true;
+    });
+    document.addEventListener("keyup", () => {
+      if (bAltKeyDown && bShitDown) {
+        switchLanguage();
+        bShitDown = false;
+      }
+    });
+  }
+});
+
+document.body.addEventListener("keyup", (event) => {
+  for (let i = 0; i < keyboardCode.length; i++) {
+    if (event.code === keyboardCode[i]) {
+      if (event.code === "CapsLock") return;
+      keyButtons[i].classList.remove("key-button_active");
+    }
+    // reset shift
+    if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
+      bShift = false;
+      shiftKeyInput(); // reinitialize keyboard
+    }
+
+    if (event.code === "AltLeft") bAltKeyDown = false;
+  }
+});

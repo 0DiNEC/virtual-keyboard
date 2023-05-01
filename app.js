@@ -192,7 +192,7 @@ let keyButtons = document.querySelectorAll(".key-button"); // all key buttons on
 // virtual keyboard mouse down
 for (let i = 0; i < keyButtons.length; i++) {
   keyButtons[i].addEventListener("mousedown", function (event) {
-    if (keyboardCode[i] == "CapsLock") 
+    if (keyboardCode[i] == "CapsLock")
       keyButtons[i].classList.toggle("key-button_active");
     keyDown(keyboardCode[i], keyButtons[i]);
   });
@@ -251,10 +251,13 @@ function shiftKeyInput() {
   let buttonNum = 0;
   for (let i = 0; i < englishKeyboardLayout.length; i++) {
     for (let j = 0; j < englishKeyboardLayout[i].length; j++, buttonNum++) {
-      if (englishKeyboardLayout[i][j][2] === true) // for letter
+      if (englishKeyboardLayout[i][j][2] === true)
+        // for letter
         keyButtons[buttonNum].textContent = englishKeyboardLayout[i][j][nShift];
-      else // for spec sim
-      keyButtons[buttonNum].textContent = englishKeyboardLayout[i][j][bShift ? 1 : 0];
+      // for spec sim
+      else
+        keyButtons[buttonNum].textContent =
+          englishKeyboardLayout[i][j][bShift ? 1 : 0];
     }
   }
 }
@@ -276,7 +279,6 @@ function keyDown(code, button) {
   switch (code) {
     case "Backspace":
       if (textarea.selectionStart === 0) break;
-
       text =
         text.substring(0, cursorPosition - 1) + text.substring(cursorPosition);
       // set textarea value
@@ -288,7 +290,6 @@ function keyDown(code, button) {
         text.substring(0, cursorPosition) +
         "\t" +
         text.substring(cursorPosition, text.length);
-
       // set textarea value
       textarea.value = text;
       textarea.setSelectionRange(
@@ -303,16 +304,29 @@ function keyDown(code, button) {
       shiftKeyInput();
       break;
 
+    case "Enter":
+      text =
+        text.substring(0, cursorPosition) +
+        "\n" +
+        text.substring(cursorPosition, text.length);
+      // set textarea value
+      textarea.value = text;
+      textarea.setSelectionRange(
+        cursorPosition + "\t".length,
+        cursorPosition + "\t".length
+      );
+      break;
+
     case "CapsLock":
       bCaps = !bCaps;
       capsLockKeyInput();
       break;
+
     default:
       text =
         text.substring(0, cursorPosition) +
         button.textContent +
         text.substring(cursorPosition, text.length);
-
       // set textarea value
       textarea.value = text;
       textarea.setSelectionRange(

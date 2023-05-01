@@ -189,23 +189,32 @@ let textarea = document.querySelector(".textarea"); // textarea for output press
 let keyButtons = document.querySelectorAll(".key-button"); // all key buttons on virtual keyboard
 
 // virtual keyboard mouse down
-for (let i = 0; i<keyButtons.length; i++) {
-  keyButtons[i].addEventListener("mousedown", function (event) {
-
-  })
+for (let i = 0; i < keyButtons.length; i++) {
+  keyButtons[i].addEventListener("mousedown", function () {
+    keyDown(keyboardCode[i], keyButtons[i]);
+  });
 }
 
-window.onkeydown = evt => {
-  if (evt.key == 'Tab') {
-      evt.preventDefault();
+// block tabulation on window
+window.onkeydown = (event) => {
+  if (event.key === "Tab") {
+    event.preventDefault();
   }
-}
+};
+
+//block keydown event on textarea keydown
+textarea.addEventListener("keydown", function (event) {
+  event.preventDefault();
+  return;
+});
+
+
 
 //real keyboard keydown
 document.body.addEventListener("keydown", function (event) {
   for (let i = 0; i < keyboardCode.length; i++) {
     if (event.code === keyboardCode[i]) {
-      keyButtons[i].classList.add('key-button_active');
+      keyButtons[i].classList.add("key-button_active");
       keyDown(keyboardCode[i], keyButtons[i]);
     }
   }
@@ -214,19 +223,53 @@ document.body.addEventListener("keydown", function (event) {
 document.body.addEventListener("keyup", function (event) {
   for (let i = 0; i < keyboardCode.length; i++) {
     if (event.code === keyboardCode[i]) {
-      keyButtons[i].classList.remove('key-button_active');
+      keyButtons[i].classList.remove("key-button_active");
     }
   }
 });
 
+
 function keyDown(code, button) {
-  const cursorPosition = textarea.selectionStart;
-  let text = textarea.textContent;
-  switch (code){
-    case "Backspace": text = text.substring(0, text.length - 1);
-    case "Tab": text += text.substring(0, cursorPosition) + "\t" + text.substring(cursorPosition, text.length);
-    default: text += text.substring(0, cursorPosition) + button.textContent;
+  let cursorPosition = textarea.selectionStart;
+  let text = textarea.value;
+  switch (code) {
+    case "Backspace":
+//      console.log(textarea.selectionStart);
+      if (textarea.selectionStart === 0) break;
+
+      text =
+        text.substring(0, cursorPosition - 1) + text.substring(cursorPosition);
+      // set textarea value
+      textarea.value = text;
+      textarea.selectionStart = cursorPosition - 1;
+//      console.log(cursorPosition - 1);
+      break;
+    case "Tab":
+      text =
+        text.substring(0, cursorPosition) +
+        "\t" +
+        text.substring(cursorPosition, text.length);
+
+      // set textarea value
+      textarea.value = text;
+      textarea.setSelectionRange(
+        cursorPosition + "\t".length,
+        cursorPosition + "\t".length
+      );
+      break;
+    default:
+      text =
+        text.substring(0, cursorPosition) +
+        button.textContent +
+        text.substring(cursorPosition, text.length);
+
+      // set textarea value
+      textarea.value = text;
+      textarea.setSelectionRange(
+        cursorPosition + button.textContent.length,
+        cursorPosition + button.textContent.length
+      );
+      break;
   }
-  console.log(text);
-  textarea.textContent = text;
 }
+

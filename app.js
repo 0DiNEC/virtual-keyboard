@@ -85,6 +85,89 @@ const englishKeyboardLayout = [
   ],
 ];
 
+const russianKeyboardLayout = [
+  // first row
+  [
+    ["ё", "Ё", true],
+    ["1", "!", false],
+    ["2", '"', false],
+    ["3", "№", false],
+    ["4", ";", false],
+    ["5", "%", false],
+    ["6", ":", false],
+    ["7", "?", false],
+    ["8", "*", false],
+    ["9", "(", false],
+    ["0", ")", false],
+    ["-", "_", false],
+    ["=", "+", false],
+    ["Backspace", "Backspace", false],
+  ],
+  // second row
+  [
+    ["Tab", "Tab", false],
+    ["й", "Й", true],
+    ["ц", "Ц", true],
+    ["у", "У", true],
+    ["к", "К", true],
+    ["е", "Е", true],
+    ["н", "Н", true],
+    ["г", "Г", true],
+    ["ш", "Ш", true],
+    ["щ", "Щ", true],
+    ["з", "З", true],
+    ["х", "Х", true],
+    ["ъ", "Ъ", true],
+    ["\\", "/", false],
+    ["Del", "Del", false],
+  ],
+  //third row
+  [
+    ["Caps Lock", "Caps Lock", false],
+    ["ф", "Ф", true],
+    ["ы", "Ы", true],
+    ["в", "В", true],
+    ["а", "А", true],
+    ["п", "П", true],
+    ["р", "Р", true],
+    ["о", "О", true],
+    ["л", "Л", true],
+    ["д", "Д", true],
+    ["ж", "Ж", true],
+    ["э", "Э", true],
+    ["Enter", "Enter", false],
+  ],
+  // fourth row
+
+  [
+    ["Shift", "Shift", false],
+    ["я", "Я", true],
+    ["ч", "Ч", true],
+    ["с", "С", true],
+    ["м", "М", true],
+    ["и", "И", true],
+    ["т", "Т", true],
+    ["ь", "Ь", true],
+    ["б", "Б", true],
+    ["ю", "Ю", true],
+    [".", ",", false],
+    ["▲", "▲", false],
+    ["Shift", "Shift", false],
+  ],
+  // five row
+  [
+    ["Ctrl", "Ctrl", false],
+    ["Win", "Win", false],
+    ["Alt", "Alt", false],
+    [" ", " ", false],
+    ["Alt", "Alt", false],
+    ["◄", "◄", "◄", "◄", false],
+    ["▼", "▼", "▼", "▼", false],
+    ["►", "►", "►", "►", false],
+    ["Ctrl", "Ctrl", false],
+  ],
+];
+
 const keyboardCode = [
   // first row
   "Backquote",
@@ -156,8 +239,17 @@ const keyboardCode = [
   "ArrowRight",
   "ControlRight",
 ];
-
+let lang;
 function buildHTML() {
+  if (localStorage.getItem('lang') === "en")
+  lang = englishKeyboardLayout;
+  else if (localStorage.getItem('lang') === "ru")
+  lang = russianKeyboardLayout;
+  else {
+    localStorage.setItem('lang', 'en');
+    lang = englishKeyboardLayout;
+  }
+
   document.body.className = "body";
   document.body.insertAdjacentHTML(
     "afterbegin",
@@ -170,10 +262,10 @@ function buildHTML() {
   // create keyboard
   let keyboard = document.querySelector(".keyboard");
   let keyButtonNum = 0;
-  for (let i = 0; i < englishKeyboardLayout.length; i++) {
+  for (let i = 0; i < lang.length; i++) {
     let innerHTML = `<div class="keyboard__row __row${i}">`;
-    for (let j = 0; j < englishKeyboardLayout[i].length; j++, keyButtonNum++) {
-      innerHTML += `<span class="key-button key-button${keyButtonNum}">${englishKeyboardLayout[i][j][0]}</span>`;
+    for (let j = 0; j < lang[i].length; j++, keyButtonNum++) {
+      innerHTML += `<span class="key-button key-button${keyButtonNum}">${lang[i][j][0]}</span>`;
     }
     innerHTML += `</div>`;
     keyboard.insertAdjacentHTML("beforeend", innerHTML);
@@ -182,9 +274,9 @@ function buildHTML() {
 buildHTML();
 
 // caps lock key down
-bCaps = false;
+let bCaps = false;
 // shift key down
-bShift = false;
+let bShift = false;
 
 let textarea = document.querySelector(".textarea"); // textarea for output press buttons values
 let keyButtons = document.querySelectorAll(".key-button"); // all key buttons on virtual keyboard
@@ -205,7 +297,7 @@ for (let i = 0; i < keyButtons.length; i++) {
 // virtual keyboard mouse up
 for (let i = 0; i < keyButtons.length; i++) {
   keyButtons[i].addEventListener("mouseup", function (event) {
-  console.log("После",textarea.selectionStart)
+    console.log("После", textarea.selectionStart);
     if (keyboardCode[i] === "ShiftLeft" || keyboardCode[i] === "ShiftRight") {
       bShift = false;
       shiftKeyInput();
@@ -233,13 +325,13 @@ textarea.addEventListener("keydown", function (event) {
   return;
 });
 
-textarea.addEventListener("click", function(event) {
+textarea.addEventListener("click", function (event) {
   mouseSelectionStart = textarea.selectionStart;
   event.preventDefault();
 });
 
 //real keyboard keydown
-document.body.addEventListener("keydown", function (event) {
+document.addEventListener("keydown", function (event) {
   for (let i = 0; i < keyboardCode.length; i++) {
     if (event.code === keyboardCode[i]) {
       if (event.code == "CapsLock") {
@@ -248,7 +340,27 @@ document.body.addEventListener("keydown", function (event) {
       keyDown(keyboardCode[i], keyButtons[i]);
     }
   }
+  if (event.code === "AltLeft") {
+    let bAltKeyDown = true;
+    document.addEventListener("keydown", function (event) {
+      if (bAltKeyDown && event.code === "ShiftLeft") switchLanguage();
+    });
+  } else {
+    let bAltKeyDown = false;
+  }
 });
+
+function switchLanguage() {
+  if (localStorage.getItem('lang') === "en") {
+    localStorage.setItem('lang', 'ru');
+    lang = russianKeyboardLayout;
+  }
+  else if (localStorage.getItem('lang') === 'ru') {
+    localStorage.setItem('lang', 'en');
+    lang = englishKeyboardLayout;
+  }
+  shiftKeyInput();
+}
 
 document.body.addEventListener("keyup", function (event) {
   for (let i = 0; i < keyboardCode.length; i++) {
@@ -259,7 +371,7 @@ document.body.addEventListener("keyup", function (event) {
     // reset shift
     if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
       bShift = false;
-      shiftKeyInput();
+      shiftKeyInput(); // reinitialize keyboard
     }
   }
 });
@@ -268,15 +380,13 @@ document.body.addEventListener("keyup", function (event) {
 function shiftKeyInput() {
   const nShift = !bCaps ? (bShift ? 1 : 0) : bShift ? 0 : 1;
   let buttonNum = 0;
-  for (let i = 0; i < englishKeyboardLayout.length; i++) {
-    for (let j = 0; j < englishKeyboardLayout[i].length; j++, buttonNum++) {
-      if (englishKeyboardLayout[i][j][2] === true)
+  for (let i = 0; i < lang.length; i++) {
+    for (let j = 0; j < lang[i].length; j++, buttonNum++) {
+      if (lang[i][j][2] === true)
         // for letter
-        keyButtons[buttonNum].textContent = englishKeyboardLayout[i][j][nShift];
+        keyButtons[buttonNum].textContent = lang[i][j][nShift];
       // for spec sim
-      else
-        keyButtons[buttonNum].textContent =
-          englishKeyboardLayout[i][j][bShift ? 1 : 0];
+      else keyButtons[buttonNum].textContent = lang[i][j][bShift ? 1 : 0];
     }
   }
 }
@@ -284,10 +394,10 @@ function shiftKeyInput() {
 function capsLockKeyInput() {
   const nShift = !bCaps ? (bShift ? 1 : 0) : bShift ? 0 : 1;
   let buttonNum = 0;
-  for (let i = 0; i < englishKeyboardLayout.length; i++) {
-    for (let j = 0; j < englishKeyboardLayout[i].length; j++, buttonNum++) {
-      if (englishKeyboardLayout[i][j][2] === true)
-        keyButtons[buttonNum].textContent = englishKeyboardLayout[i][j][nShift];
+  for (let i = 0; i < lang.length; i++) {
+    for (let j = 0; j < lang[i].length; j++, buttonNum++) {
+      if (lang[i][j][2] === true)
+        keyButtons[buttonNum].textContent = lang[i][j][nShift];
     }
   }
 }

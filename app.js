@@ -188,21 +188,27 @@ bShift = false;
 
 let textarea = document.querySelector(".textarea"); // textarea for output press buttons values
 let keyButtons = document.querySelectorAll(".key-button"); // all key buttons on virtual keyboard
+let mouseSelectionStart = textarea.selectionStart;
 
 // virtual keyboard mouse down
 for (let i = 0; i < keyButtons.length; i++) {
   keyButtons[i].addEventListener("mousedown", function (event) {
+    textarea.selectionStart = mouseSelectionStart;
     if (keyboardCode[i] == "CapsLock")
       keyButtons[i].classList.toggle("key-button_active");
     keyDown(keyboardCode[i], keyButtons[i]);
+    console.log("до", textarea.selectionStart);
   });
 }
 
 // virtual keyboard mouse up
 for (let i = 0; i < keyButtons.length; i++) {
-  keyButtons[i].addEventListener("mouseup", function () {
-    bShift = false;
-    shiftKeyInput();
+  keyButtons[i].addEventListener("mouseup", function (event) {
+  console.log("После",textarea.selectionStart)
+    if (keyboardCode[i] === "ShiftLeft" || keyboardCode[i] === "ShiftRight") {
+      bShift = false;
+      shiftKeyInput();
+    }
   });
 }
 
@@ -224,6 +230,11 @@ window.onkeydown = (event) => {
 textarea.addEventListener("keydown", function (event) {
   event.preventDefault();
   return;
+});
+
+textarea.addEventListener("click", function(event) {
+  mouseSelectionStart = textarea.selectionStart;
+  event.preventDefault();
 });
 
 //real keyboard keydown
@@ -355,10 +366,8 @@ function keyDown(code, button) {
         text.substring(cursorPosition, text.length);
       // set textarea value
       textarea.value = text;
-      textarea.setSelectionRange(
-        cursorPosition + button.textContent.length,
-        cursorPosition + button.textContent.length
-      );
+      textarea.selectionStart = cursorPosition + 1;
+      textarea.selectionEnd = cursorPosition + 1;
       break;
   }
 }

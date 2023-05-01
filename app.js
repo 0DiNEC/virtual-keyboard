@@ -202,7 +202,7 @@ for (let i = 0; i < keyButtons.length; i++) {
 for (let i = 0; i < keyButtons.length; i++) {
   keyButtons[i].addEventListener("mouseup", function () {
     bShift = false;
-    changeKeyboard();
+    shiftKeyInput();
   });
 }
 

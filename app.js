@@ -197,6 +197,7 @@ for (let i = 0; i < keyButtons.length; i++) {
     if (keyboardCode[i] == "CapsLock")
       keyButtons[i].classList.toggle("key-button_active");
     keyDown(keyboardCode[i], keyButtons[i]);
+    mouseSelectionStart = textarea.selectionStart;
     console.log("до", textarea.selectionStart);
   });
 }

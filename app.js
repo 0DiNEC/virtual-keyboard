@@ -292,12 +292,6 @@ for (let i = 0; i < keyButtons.length; i++) {
 }
 
 // virtual keyboard mouse up
-for (let i = 0; i < keyButtons.length; i++) {
-  keyButtons[i].addEventListener("mouseup", function (event) {
-    console.log("После", textarea.selectionStart);
-  });
-}
-
 document.addEventListener("mouseup", function(event) {
   if (bShift) {
     bShift = false;

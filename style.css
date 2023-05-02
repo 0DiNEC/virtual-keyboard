@@ -21,6 +21,15 @@
   margin-bottom: 30px;
 }
 
+.info {
+  margin-top: 20px;
+
+  font-size: 2em;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  color: white;
+}
+
 .keyboard__row {
   display: flex;
 }

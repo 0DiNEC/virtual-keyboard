@@ -270,6 +270,12 @@ function buildHTML() {
     innerHTML += "</div>";
     keyboard.insertAdjacentHTML("beforeend", innerHTML);
   }
+
+  document.body.insertAdjacentHTML(
+    "beforeend",
+    `<p class="info">Клавиатура создана в операционоой системе Windows</p>
+    <p class="info">Для переключения языка комбинация: левые Alt + Shift </p>`
+  );
 }
 buildHTML();
 
@@ -316,7 +322,8 @@ function keyDown(code, button) {
   switch (code) {
     case "Backspace":
       if (cursorPosition === 0) break;
-      text = text.substring(0, cursorPosition - 1) + text.substring(cursorPosition);
+      text =
+        text.substring(0, cursorPosition - 1) + text.substring(cursorPosition);
       // set textarea value
       textarea.value = text;
       textarea.selectionStart = cursorPosition - 1;
@@ -324,7 +331,8 @@ function keyDown(code, button) {
 
     case "Delete": {
       if (cursorPosition === text.length) break;
-      text = text.substring(0, cursorPosition) + text.substring(cursorPosition + 1);
+      text =
+        text.substring(0, cursorPosition) + text.substring(cursorPosition + 1);
       // set textarea value
       textarea.value = text;
       textarea.selectionStart = cursorPosition;
@@ -377,9 +385,10 @@ function keyDown(code, button) {
       break;
 
     default:
-      text = text.substring(0, cursorPosition)
-        + button.textContent
-        + text.substring(cursorPosition, text.length);
+      text =
+        text.substring(0, cursorPosition) +
+        button.textContent +
+        text.substring(cursorPosition, text.length);
       // set textarea value
       textarea.value = text;
       textarea.selectionStart = cursorPosition + 1;
@@ -459,7 +468,7 @@ document.addEventListener("keydown", (event) => {
       keyDown(keyboardCode[i], keyButtons[i]);
     }
   }
-  mouseSelectionStart = textarea.selectionStart
+  mouseSelectionStart = textarea.selectionStart;
 });
 
 let bAltKeyDown = false;

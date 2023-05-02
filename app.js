@@ -459,6 +459,7 @@ document.addEventListener("keydown", (event) => {
       keyDown(keyboardCode[i], keyButtons[i]);
     }
   }
+  mouseSelectionStart = textarea.selectionStart
 });
 
 let bAltKeyDown = false;
@@ -492,3 +493,8 @@ document.body.addEventListener("keyup", (event) => {
     if (event.code === "AltLeft") bAltKeyDown = false;
   }
 });
+
+textarea.focus();
+textarea.onblur = () => {
+  textarea.focus();
+};

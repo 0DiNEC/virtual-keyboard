@@ -274,7 +274,9 @@ function buildHTML() {
   document.body.insertAdjacentHTML(
     "beforeend",
     `<p class="info">Клавиатура создана в операционоой системе Windows</p>
-    <p class="info">Для переключения языка комбинация: левые Alt + Shift </p>`
+    <p class="info">Для переключения языка комбинация: левые Alt + Shift </p>
+    <p class="info">Для переключения RGB подсветки комбинация: правые Ctrl + Shift </p>`
+    
   );
 }
 buildHTML();

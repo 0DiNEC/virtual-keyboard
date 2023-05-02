@@ -413,6 +413,38 @@ function switchLanguage() {
   }
 }
 
+// RGB light
+let red = 255;
+let green = 0;
+let blue = 0;
+let bRGB = false;
+let bMakeRGB = false;
+let bCreateRGBAgain = true; // for only one create RGB
+
+function makeRGB() {
+  if (bMakeRGB) {
+    bMakeRGB = false;
+    let colorInterval = setInterval(function () {
+      if (bRGB) {
+        for (let i = keyButtons.length - 1; i >= 0; i--) {
+          keyButtons[i].style.borderColor =
+            "rgb(" + red + "," + green + "," + blue + ")";
+          if (red > 0 && blue === 0) {
+            red--;
+            green++;
+          } else if (green > 0 && red === 0) {
+            green--;
+            blue++;
+          } else if (blue > 0 && green === 0) {
+            red++;
+            blue--;
+          }
+        }
+      }
+    }, 100);
+  }
+}
+
 // virtual keyboard mouse down
 for (let i = 0; i < keyButtons.length; i++) {
   // eslint-disable-next-line no-loop-func
@@ -472,7 +504,12 @@ document.addEventListener("keydown", (event) => {
 });
 
 let bAltKeyDown = false;
+let bRGBControlKeyDown = false;
+let bRGBShiftKeyDown = false;
+let previousRGBStatus = bRGB;
+
 document.addEventListener("keydown", (event) => {
+  //Switch language
   if (event.code === "AltLeft") {
     bAltKeyDown = true;
     document.addEventListener("keydown", (eventShiftDown) => {
@@ -482,6 +519,38 @@ document.addEventListener("keydown", (event) => {
       if (bAltKeyDown && bShitDown) {
         switchLanguage();
         bShitDown = false;
+      }
+    });
+  }
+
+  //RGB Make
+  if (event.code === "ControlRight") {
+    bRGBControlKeyDown = true;
+    document.addEventListener("keydown", (eventShiftDown) => {
+      if (eventShiftDown.code === "ShiftRight") {
+        bRGBShiftKeyDown = true;
+        previousRGBStatus = bRGB;
+      }
+    });
+    document.addEventListener("keyup", () => {
+      if (bRGBControlKeyDown && bRGBShiftKeyDown) {
+        if (bCreateRGBAgain) {
+          bCreateRGBAgain = false;
+          bRGBShiftKeyDown = false;
+          bMakeRGB = true; // Do Rgb
+          bRGB = !bRGB;
+          makeRGB();
+        } else {
+
+          if (!previousRGBStatus) {
+            bRGB = true; 
+          }
+          else {
+            for (let i = keyButtons.length - 1; i >= 0; i--)
+              keyButtons[i].style.borderColor = "#fff";
+              bRGB = false;
+          }
+        }
       }
     });
   }

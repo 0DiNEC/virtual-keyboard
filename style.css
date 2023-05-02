@@ -44,8 +44,8 @@
   align-items: center;
   justify-content: center;
 
-  flex-basis: 60px;
-  height: 60px;
+  flex-basis: 55px;
+  height: 55px;
   border: 1px solid white;
   background: #09001a;
   margin: 5px;
@@ -111,7 +111,7 @@
 
 .key-button29  /* caps lock */ {
   flex-grow: 1;
-  font-size: 1.2em;
+  font-size: 1.1em;
 }
 .key-button42  /* shift*/ {
   flex-grow: 1.5;

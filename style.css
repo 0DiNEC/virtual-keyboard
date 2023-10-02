@@ -1,0 +1,122 @@
+.body {
+  background: #222020;
+  tab
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  width: 75%;
+  margin: 0 auto;
+}
+
+.title {
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+}
+
+.textarea {
+  font-size: 2em;
+  margin-bottom: 30px;
+}
+
+.info {
+  margin-top: 20px;
+
+  font-size: 2em;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  color: white;
+}
+
+.keyboard__row {
+  display: flex;
+}
+
+.keyboard {
+  background: #09001a;
+  -webkit-user-select: none;
+}
+
+.key-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-basis: 55px;
+  height: 55px;
+  border: 2px solid white;
+  background: #09001a;
+  margin: 5px;
+
+  transition: all 0.1s ease-in-out;
+
+  font-size: 1.5em;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.key-button:hover {
+  cursor: pointer;
+  background-color: #230063;
+ }
+
+ .key-button:active,
+ .key-button_active{
+  background-color: #0a06b5;
+  border-radius: 5px;
+ }
+ 
+ .hidden {
+  display: none;
+ }
+
+.key-button13, /* backspace */
+.key-button14, /* tab */
+.key-button28,  /* del */
+.key-button29,  /* caps lock */
+.key-button41,  /* enter */
+.key-button42,  /* shift */
+.key-button53,  /* up arrow */
+.key-button54,  /* right shift */
+.key-button55,  /* ctrl */
+.key-button56,  /* win button */
+.key-button57,  /* alt */
+.key-button59,  /* right alt */
+.key-button60,  /* left arrow */
+.key-button61,  /* down arrow */
+.key-button62,  /* right arrow */
+.key-button63  /* right ctrl */ {
+  font-weight: 500;
+}
+
+.key-button13, /* backspace */
+.key-button14, /* tab */
+.key-button28,  /* del */
+.key-button29,  /* caps lock */
+.key-button41,  /* enter */
+.key-button42,  /* shift */
+.key-button54  /* right shift */ {
+  padding: 0 0.5em;
+}
+
+.key-button13, /* backspace */
+.key-button28,  /* del */
+.key-button41,  /* enter */
+.key-button54,  /* right shift */ 
+.key-button58  /* space*/ {
+  flex-grow: 2;
+}
+
+.key-button29  /* caps lock */ {
+  flex-grow: 1;
+  font-size: 1.1em;
+}
+.key-button42  /* shift*/ {
+  flex-grow: 1.5;
+}
+
+.key-button63 /* right control*/ {
+  flex-grow: 0.2;
+}
